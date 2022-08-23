@@ -1,12 +1,14 @@
 #include <iostream>
 #include "adder.h"
 #include "GLFW/glfw3.h"
+#include "ConfigV.h"
 
-int main(){
+int main(int argc, char* argv[]){
     std::cout << "hello,there\n";
     
     std::cout << add(74.2, 56.6) << '\n';
 
+    std::cout << argv[0] << " VERSION " << HELLO_VERSION_MAJOR << '.' << HELLO_VERSION_MINOR << '\n';
     GLFWwindow* window;
     int width, height;
 
