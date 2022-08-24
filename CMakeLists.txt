@@ -2,13 +2,23 @@ cmake_minimum_required(VERSION 3.16.3)
 
 project(HELLO VERSION 1.0)
 
-configure_file(ConfigV.h.in ConfigV.h)
+# add adder logic
+option(USE_ADDER "A simple lib for adding 2 doubles." ON)
+if(USE_ADDER)
+    add_subdirectory(adder)
+
+    list(APPEND EXTRA_LIB_DIR "adder")
+    list(APPEND EXTRA_INCLUSE_DIR "adder")
+    list(APPEND EXTRA_LINKS adder)
+endif()
+
+
+configure_file(Config.h.in Config.h)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
-add_subdirectory(adder)
 
 #download all the submodules
 find_package(Git QUIET)
@@ -31,20 +41,18 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
 endif()
 
 
-
-
 add_subdirectory(external/glfw)
 
 target_include_directories(${PROJECT_NAME} 
-    PUBLIC adder
+    PUBLIC ${EXTRA_INCLUSE_DIR}
     PUBLIC external/glfw/include
 )
 
 target_link_directories(${PROJECT_NAME} 
-    PRIVATE adder
+    PRIVATE ${EXTRA_LIB_DIR}
     PRIVATE external/glfw/src    
 )
 
-target_link_libraries(${PROJECT_NAME} adder glfw )
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LINKS} glfw )
 
 
